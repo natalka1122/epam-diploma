@@ -1,19 +1,13 @@
-import aiohttp
-import asyncio
+from flask import Flask
 import xmltodict
-import json
+import requests
+from flask import render_template
 
-async def main():
+app = Flask(__name__)
 
-    async with aiohttp.ClientSession() as session:
-        async with session.get('http://www.cbr.ru/scripts/xml_metall.asp?date_req1=01/07/2001&date_req2=13/07/2001') as response:
 
-            print("Status:", response.status)
-            print("Content-type:", response.headers['content-type'])
-
-            html = await response.text()
-            print("Body:", html)
-            print(json.dumps(xmltodict.parse(html),indent=4))
-
-loop = asyncio.get_event_loop()
-loop.run_until_complete(main())
+@app.route("/")
+def hello_world():
+    payload = {"date_req1": "01/07/2001", "date_req2": "13/07/2001"}
+    r = requests.get("http://www.cbr.ru/scripts/xml_metall.asp", params=payload)
+    return str(xmltodict.parse(r.text))
