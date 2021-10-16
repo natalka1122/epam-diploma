@@ -1,5 +1,7 @@
 pipeline {
-  agent proxmox
+  agent {
+    label 'proxmox'
+  }
   stages {
     stage('docker build') {
       steps {
