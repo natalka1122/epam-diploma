@@ -8,5 +8,10 @@ pipeline {
         sh 'ls -la'
       }
     }
+    stage('wait') {
+      steps {
+        input 'zxc'
+      }
+    }
   }
 }
