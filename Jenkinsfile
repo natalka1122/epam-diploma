@@ -5,12 +5,17 @@ pipeline {
   stages {
     stage('docker build') {
       steps {
-        sh 'ls -la'
+        sh 'docker-compose build'
       }
     }
-    stage('wait') {
+    stage('docker down') {
       steps {
-        input 'zxc'
+        input 'docker-compose down'
+      }
+    }
+    stage('docker up') {
+      steps {
+        input 'docker-compose up -d'
       }
     }
   }
