@@ -1,7 +1,7 @@
 pipeline {
-  agent any
+  agent proxmox
   stages {
-    stage('bbb3') {
+    stage('docker build') {
       steps {
         sh 'echo 1'
       }
