@@ -5,7 +5,7 @@ pipeline {
   stages {
     stage('docker build') {
       steps {
-        sh 'echo 1'
+        sh 'ls -la'
       }
     }
   }
