@@ -4,6 +4,7 @@ services:
   frontend:
     # image: nginx
     build:
+      context: .
       dockerfile: Dockerfile.frontend
 
   backend:
