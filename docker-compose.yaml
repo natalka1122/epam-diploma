@@ -6,11 +6,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      args: frontemd/
+      args:
+        SOURCE_DIR: frontend/
 
   backend:
 #    image: nginx
     build:
       context: .
       dockerfile: Dockerfile
-      args: backend/
+      args:
+        SOURCE_DIR: backend/
