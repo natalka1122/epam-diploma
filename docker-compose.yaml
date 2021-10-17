@@ -2,7 +2,9 @@ version: "3.9"
 
 services:
   frontend:
-    image: nginx
+    # image: nginx
+    build:
+      dockerfile: Dockerfile.frontend
 
   backend:
     image: nginx
