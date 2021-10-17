@@ -13,6 +13,8 @@ pipeline {
       }
       steps {
         sh 'echo 1'
+        sh 'python3 -m pylint --output-format=parseable --fail-under=9 frontend --msg-template="{path}:{line}: [{msg_id}({symbol}), {obj}] {msg}" | tee pylint.log || echo "pylint exited with $?"'
+        sh 'python3 -m pylint --output-format=parseable --fail-under=9 backend --msg-template="{path}:{line}: [{msg_id}({symbol}), {obj}] {msg}" | tee pylint.log || echo "pylint exited with $?"'
         input "2"
       }
     }
