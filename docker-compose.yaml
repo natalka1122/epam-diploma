@@ -5,7 +5,12 @@ services:
     # image: nginx
     build:
       context: .
-      dockerfile: Dockerfile.frontend
+      dockerfile: Dockerfile
+      args: frontemd/
 
   backend:
-    image: nginx
+#    image: nginx
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args: backend/
