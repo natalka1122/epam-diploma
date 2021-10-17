@@ -13,7 +13,7 @@ services:
       BACKEND_URL: http://backend:5000
     networks:
       - backend
-      - frontend
+      - default
 
   backend:
     build:
@@ -26,4 +26,4 @@ services:
 
 networks:
   backend:
-  frontend:
+  default:
