@@ -1,5 +1,9 @@
 pipeline {
   agent any
+  environment {
+    TOKEN = credentials('botSecret')
+    CHAT_ID = credentials('chatId')
+  }
   stages {
     stage('lint') {
       agent {
@@ -27,9 +31,9 @@ pipeline {
   post {
     success {
       node('java-docker-slave') {
-        withCredentials([string(credentialsId: 'botSecret', variable: 'TOKEN'), string(credentialsId: 'chatId', variable: 'CHAT_ID')]) {
+        // withCredentials([string(credentialsId: 'botSecret', variable: 'TOKEN'), string(credentialsId: 'chatId', variable: 'CHAT_ID')]) {
           sh "wget  -qO- --post-data='parse_mode=markdown&chat_id=${CHAT_ID}&text=*${env.JOB_NAME}* : POC *Branch*: ${env.GIT_BRANCH} *Build* : OK *Published* = YES' https://api.telegram.org/bot${TOKEN}/sendMessage"
-        }
+        // }
       }
     }
 
