@@ -19,4 +19,15 @@ pipeline {
       }
     }
   }
+  post {
+    success {
+      telegramSend 'success'
+    }
+    aborted {
+      telegramSend 'aborted'
+    }
+    failure {
+      telegramSend 'failure'
+    }
+  }
 }
