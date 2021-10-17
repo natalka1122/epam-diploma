@@ -1,5 +1,5 @@
 pipeline {
-  agent none
+  agent any
   stages {
     stage('lint') {
       agent {
@@ -26,7 +26,7 @@ pipeline {
   }
   post {
     success {
-      agent any
+      // agent any
       // agent {
       //   label 'java-docker-slave'
       // }
