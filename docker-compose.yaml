@@ -2,17 +2,26 @@ version: "3.9"
 
 services:
   frontend:
-    # image: nginx
     build:
       context: .
       dockerfile: Dockerfile
       args:
         SOURCE_DIR: frontend/
+    ports:
+      - 5000:5000/tcp
+    environment:
+      BACKEND_URL: http://backend:5000
+    networks:
+      - backend
 
   backend:
-#    image: nginx
     build:
       context: .
       dockerfile: Dockerfile
       args:
         SOURCE_DIR: backend/
+    networks:
+      - backend
+
+networks:
+  backend:
