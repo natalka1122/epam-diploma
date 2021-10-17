@@ -3,7 +3,9 @@ pipeline {
   stages {
     stage('lint') {
       agent {
-        label 'java-docker-slave'
+        node {
+          label 'java-docker-slave'
+        }
       }
       steps {
         sh 'echo 1'
@@ -11,7 +13,9 @@ pipeline {
     }
     stage('docker-compose full restart') {
       agent {
-        label 'proxmox'
+        node {
+          label 'proxmox'
+        }
       }
       steps {
         sh 'docker-compose down'
