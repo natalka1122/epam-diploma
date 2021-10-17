@@ -10,12 +10,12 @@ pipeline {
     }
     stage('docker down') {
       steps {
-        input 'docker-compose down'
+        sh 'docker-compose down'
       }
     }
     stage('docker up') {
       steps {
-        input 'docker-compose up -d'
+        sh 'docker-compose up -d'
       }
     }
   }
