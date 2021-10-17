@@ -13,6 +13,7 @@ pipeline {
       }
       steps {
         sh 'echo 1'
+        input "2"
       }
     }
     stage('docker-compose full restart') {
