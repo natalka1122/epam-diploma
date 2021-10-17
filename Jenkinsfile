@@ -1,20 +1,21 @@
 pipeline {
-  agent {
-    label 'proxmox'
-  }
+  agent none
   stages {
-    stage('docker build') {
+    stage('lint') {
+      agent {
+        label 'java-docker-slave'
+      }
       steps {
-        sh 'docker-compose build'
+        sh 'echo 1'
       }
     }
-    stage('docker down') {
+    stage('docker-compose full restart') {
+      agent {
+        label 'proxmox'
+      }
       steps {
         sh 'docker-compose down'
-      }
-    }
-    stage('docker up') {
-      steps {
+        sh 'docker-compose build'
         sh 'docker-compose up -d'
       }
     }
