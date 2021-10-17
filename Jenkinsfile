@@ -37,17 +37,13 @@ pipeline {
 
     aborted {
       node('java-docker-slave') {
-        withCredentials([string(credentialsId: 'botSecret', variable: 'TOKEN'), string(credentialsId: 'chatId', variable: 'CHAT_ID')]) {
-          sh "wget -qO- --post-data='parse_mode=markdown&chat_id=${CHAT_ID}&text=*${env.JOB_NAME}* : POC *Branch*: ${env.GIT_BRANCH} *Build* : Aborted *Published* = Aborted' https://api.telegram.org/bot${TOKEN}/sendMessage"
-        }
+        sh 'wget -qO- --post-data="parse_mode=markdown&chat_id=' + CHAT_ID + '&text=*' + env.JOB_NAME+ '* : POC *Branch*: ' + env.GIT_BRANCH + ' *Build* : Aborted *Published* = Aborted" https://api.telegram.org/bot' + TOKEN + '/sendMessage'
       }
     }
 
     failure {
       node('java-docker-slave') {
-        withCredentials([string(credentialsId: 'botSecret', variable: 'TOKEN'), string(credentialsId: 'chatId', variable: 'CHAT_ID')]) {
-          sh "wget -qO- --post-data='parse_mode=markdown&chat_id=${CHAT_ID}&text=*${env.JOB_NAME}* : POC *Branch*: ${env.GIT_BRANCH} *Build* : not OK *Published* = NO' https://api.telegram.org/bot${TOKEN}/sendMessage"
-        }
+        sh 'wget -qO- --post-data="parse_mode=markdown&chat_id=' + CHAT_ID + '&text=*' + env.JOB_NAME+ '* : POC *Branch*: ' + env.GIT_BRANCH + ' *Build* : not OK *Published* = NO" https://api.telegram.org/bot' + TOKEN + '/sendMessage'
       }
     }
   }
