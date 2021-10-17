@@ -9,7 +9,6 @@ pipeline {
       }
       steps {
         sh 'echo 1'
-        sh 'curl ya.ru'
       }
     }
     stage('docker-compose full restart') {
