@@ -12,7 +12,7 @@ pipeline {
         }
       }
       steps {
-        sh 'echo 1'
+        input "1"
         sh 'python -m venv venv && source venv/bin/activate && pip install -r frontend/requirements.txt'
         sh 'python3 -m pylint --output-format=parseable --fail-under=9 frontend --msg-template="{path}:{line}: [{msg_id}({symbol}), {obj}] {msg}" | tee pylint.log || echo "pylint exited with $?"'
         sh 'python3 -m pylint --output-format=parseable --fail-under=9 backend --msg-template="{path}:{line}: [{msg_id}({symbol}), {obj}] {msg}" | tee pylint.log || echo "pylint exited with $?"'
