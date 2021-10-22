@@ -16,7 +16,7 @@ pipeline {
       steps {
         echo 'Building container image...'
         script {
-          dockerInstance = docker.build("frontend","--build-arg SOURCE_DIR=frontend .")
+          dockerInstance = docker.build("frontend","--build-arg SOURCE_DIR=frontend/ .")
         }
       }
     }
