@@ -30,7 +30,7 @@ pipeline {
         echo 'Running tests inside the container...'
         script {
           //dockerInstance.inside('-u root'){
-          docker.image*=("frontend") {
+          docker.image("frontend") {
             sh 'pip install -r /app/requirements.txt'
             sh 'pip install --upgrade pylint'
             sh 'cd /app && python3 -m pylint --output-format=parseable --fail-under=9 frontend --msg-template="{path}:{line}: [{msg_id}({symbol}), {obj}] {msg}" | tee pylint.log || echo "pylint exited with $?"'
