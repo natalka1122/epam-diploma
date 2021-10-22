@@ -33,7 +33,7 @@ pipeline {
           //docker.image("frontend") {
             sh 'pip install -r /app/requirements.txt'
             sh 'pip install --upgrade pylint'
-            sh 'cd /app && python3 -m pylint --output-format=parseable --fail-under=9 frontend --msg-template="{path}:{line}: [{msg_id}({symbol}), {obj}] {msg}" | tee pylint.log || echo "pylint exited with $?"'
+            sh 'cd /app && python3 -m pylint --output-format=parseable --fail-under=9 --msg-template="{path}:{line}: [{msg_id}({symbol}), {obj}] {msg}" *.py | tee pylint.log || echo "pylint exited with $?"'
             sh 'sleep 1000'
           }
         }
