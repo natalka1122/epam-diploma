@@ -3,8 +3,23 @@ pipeline {
   environment {
     TOKEN = credentials('botSecret')
     CHAT_ID = credentials('chatId')
+    image_name_frontend = "natalka1122/epam-diploma-frontend"
+    registryCredentialSet = 'dockerhub'
   }
   stages {
+    stage('build frontend'){
+      agent {
+        node {
+          label 'proxmox'
+        }
+      }
+      steps {
+        echo 'Building container image...'
+        script {
+          dockerInstance = docker.build("frontend","--build-arg SOURCE_DIR=frontend .")
+        }
+      }
+    }
     stage('lint') {
       agent {
         node {
