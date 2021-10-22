@@ -21,6 +21,11 @@ pipeline {
       }
     }
     stage('Test') {
+      agent {
+        node {
+          label 'proxmox'
+        }
+      }
       steps {
         echo 'Running tests inside the container...'
         script {
