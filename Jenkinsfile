@@ -68,6 +68,7 @@ pipeline {
             for (int i = 0; i < image_build.size(); i++) {
               echo "image_build = ${image_build[i]}"
               image_build[i].push()
+            }
           }
         }
       }
