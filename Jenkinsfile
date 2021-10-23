@@ -16,7 +16,7 @@ pipeline {
       steps {
         echo 'Building container image...'
         script {
-          def image_names = ['frondend', 'backend']
+          def image_names = ['frontend', 'backend']
           def image_build = []
           for (int i = 0; i < image_names.size(); i++) {
             echo "image_name = ${image_names[i]}"
