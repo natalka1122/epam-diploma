@@ -45,6 +45,7 @@ pipeline {
         script {
           for (int i = 0; i < image_build.size(); i++) {
             image_build[i].inside('-u root'){
+              sh 'apk add --update gcc libc-dev'
               sh 'pip install --upgrade pylint black'
               sh 'cd /app && python3 -m pylint *.py --output-format=parseable --fail-under=9 --msg-template="{path}:{line}: [{msg_id}({symbol}), {obj}] {msg}"| tee pylint.log'
               sh 'cd /app && python3 -m black *.py --diff'
