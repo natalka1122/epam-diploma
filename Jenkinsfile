@@ -5,6 +5,7 @@ pipeline {
     CHAT_ID = credentials('chatId')
     image_name_frontend = "natalka1122/epam-diploma-frontend"
     registryCredentialSet = 'dockerhub'
+    IMAGE_NAMES = ['frontend', 'backend']
   }
   stages {
     stage('build frontend'){
@@ -16,20 +17,10 @@ pipeline {
       steps {
         echo 'Building container image...'
         script {
-          def image_names = ['frontend', 'backend']
           def image_build = []
-          for (int i = 0; i < image_names.size(); i++) {
-            image_build = image_build.add(docker.build("${image_names[i]}","--build-arg SOURCE_DIR=${image_names[i]}/ ."))
+          for (int i = 0; i < IMAGE_NAMES.size(); i++) {
+            image_build.add(docker.build("${IMAGE_NAMES[i]}","--build-arg SOURCE_DIR=${IMAGE_NAMES[i]}/ ."))
           }
-          // echo image_build.join(", ")
-          echo "size = ${image_build.size()}"
-          for (int i = 0; i < image_build.size(); i++) {
-            echo "image ${i} = ${image_build[i]}"
-          }
-
-          input "000"
-          // docker_frontend = docker.build("frontend","--build-arg SOURCE_DIR=frontend/ .")
-          // docker_backend = docker.build("backend","--build-arg SOURCE_DIR=backend/ .")
         }
       }
     }
