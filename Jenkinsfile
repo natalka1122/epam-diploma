@@ -45,8 +45,10 @@ pipeline {
         script {
           for (int i = 0; i < image_build.size(); i++) {
             image_build[i].inside('-u root'){
-              sh 'pip install --upgrade pylint'
-              sh 'cd /app && python3 -m pylint --output-format=parseable --fail-under=9 --msg-template="{path}:{line}: [{msg_id}({symbol}), {obj}] {msg}" *.py | tee pylint.log || echo "pylint exited with $?"'
+              sh 'pip install --upgrade pylint black'
+              sh 'cd /app && python3 -m pylint *.py --output-format=parseable --fail-under=9 --msg-template="{path}:{line}: [{msg_id}({symbol}), {obj}] {msg}"| tee pylint.log'
+              sh 'cd /app && python3 -m black *.py --diff'
+              sh 'cd /app && python3 -m black *.py --check'
             }
           }
         }
