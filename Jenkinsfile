@@ -15,6 +15,7 @@ pipeline {
         script {
           image_names = ['frontend', 'backend']
           image_build = []
+          registry_credential_set = 'dockerhub'
         }
       }
     }
@@ -25,12 +26,9 @@ pipeline {
         }
       }
       steps {
-        echo 'Building container image...'
         script {
-          registry_credential_set = 'dockerhub'
           withCredentials([usernamePassword(credentialsId: registry_credential_set, passwordVariable: 'password', usernameVariable: 'username')]) {
             for (int i = 0; i < image_names.size(); i++) {
-              echo "image_name = ${image_names[i]} username = ${username}"
               image_build.add(docker.build("${username}/${image_names[i]}","--build-arg SOURCE_DIR=${image_names[i]}/ ."))
             }
           }
@@ -44,14 +42,11 @@ pipeline {
         }
       }
       steps {
-        echo 'Running tests inside the container...'
         script {
           for (int i = 0; i < image_build.size(); i++) {
-            echo "image_build = ${image_build[i]}"
             image_build[i].inside('-u root'){
               sh 'pip install --upgrade pylint'
               sh 'cd /app && python3 -m pylint --output-format=parseable --fail-under=9 --msg-template="{path}:{line}: [{msg_id}({symbol}), {obj}] {msg}" *.py | tee pylint.log || echo "pylint exited with $?"'
-              sh 'sleep 1'
             }
           }
         }
@@ -67,7 +62,6 @@ pipeline {
         script {
           docker.withRegistry('', registry_credential_set) {
             for (int i = 0; i < image_build.size(); i++) {
-              echo "image_build = ${image_build[i]}"
               image_build[i].push()
             }
           }
@@ -82,7 +76,6 @@ pipeline {
       }
       steps {
         sh 'docker-compose down'
-        // sh 'docker-compose build'
         sh 'docker-compose up -d'
       }
     }
