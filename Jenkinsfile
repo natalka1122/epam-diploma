@@ -21,8 +21,12 @@ pipeline {
           for (int i = 0; i < image_names.size(); i++) {
             image_build = image_build.add(docker.build("${image_names[i]}","--build-arg SOURCE_DIR=${image_names[i]}/ ."))
           }
-          echo image_build.join(", ")
-          echo image_build.size()
+          // echo image_build.join(", ")
+          echo "size = ${image_build.size()}"
+          for (int i = 0; i < image_build.size(); i++) {
+            echo "image ${i} = ${image_build[i]}"
+          }
+
           input "000"
           // docker_frontend = docker.build("frontend","--build-arg SOURCE_DIR=frontend/ .")
           // docker_backend = docker.build("backend","--build-arg SOURCE_DIR=backend/ .")
