@@ -3,9 +3,9 @@ pipeline {
   environment {
     TOKEN = credentials('botSecret')
     CHAT_ID = credentials('chatId')
-    image_name_frontend = "natalka1122/epam-diploma-frontend"
+    image_name_frontend = 'natalka1122/epam-diploma-frontend'
     registryCredentialSet = 'dockerhub'
-    IMAGE_NAMES = ['frontend', 'backend']
+    IMAGE_NAMES = get_image_names()
   }
   stages {
     stage('build frontend'){
@@ -89,4 +89,8 @@ pipeline {
       }
     }
   }
+}
+
+def get_image_names(){
+  return ["frontend", "backend"]
 }
