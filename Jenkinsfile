@@ -19,7 +19,7 @@ pipeline {
         }
       }
     }
-    stage('build frontend'){
+    stage('build'){
       agent {
         node {
           label 'proxmox'
@@ -56,20 +56,22 @@ pipeline {
         }
       }
     }
-    // stage('lint') {
-    //   agent {
-    //     node {
-    //       label 'java-docker-slave'
-    //     }
-    //   }
-    //   steps {
-    //     input "1"
-    //     sh 'python -m venv venv && source venv/bin/activate && pip install -r frontend/requirements.txt'
-    //     sh 'python3 -m pylint --output-format=parseable --fail-under=9 frontend --msg-template="{path}:{line}: [{msg_id}({symbol}), {obj}] {msg}" | tee pylint.log || echo "pylint exited with $?"'
-    //     sh 'python3 -m pylint --output-format=parseable --fail-under=9 backend --msg-template="{path}:{line}: [{msg_id}({symbol}), {obj}] {msg}" | tee pylint.log || echo "pylint exited with $?"'
-    //     input "2"
-    //   }
-    // }
+    stage('push images') {
+      agent {
+        node {
+          label 'proxmox'
+        }
+      }
+      steps {
+        script {
+          docker.withRegistry('', registryCredentialSet) {
+            for (int i = 0; i < image_build.size(); i++) {
+              echo "image_build = ${image_build[i]}"
+              image_build[i].push()
+          }
+        }
+      }
+    }
     stage('docker-compose full restart') {
       agent {
         node {
