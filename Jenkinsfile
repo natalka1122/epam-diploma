@@ -8,7 +8,7 @@ pipeline {
     TOKEN = credentials('botSecret')
     CHAT_ID = credentials('chatId')
     image_name_frontend = 'natalka1122/epam-diploma-frontend'
-    registryCredentialSet = 'dockerhub'
+    registry_credential_set = 'dockerhub'
   }
   stages {
     stage('init vars') {
@@ -28,9 +28,12 @@ pipeline {
       steps {
         echo 'Building container image...'
         script {
-          for (int i = 0; i < image_names.size(); i++) {
-            echo "image_name = ${image_names[i]}"
-            image_build.add(docker.build("${image_names[i]}","--build-arg SOURCE_DIR=${image_names[i]}/ ."))
+          withCredentials([
+            usernamePassword(credentialsId: 'registry_credential_set', usernameVariable: 'username')]) {
+            for (int i = 0; i < image_names.size(); i++) {
+              echo "image_name = ${image_names[i]} usename = ${usename}"
+              image_build.add(docker.build("${image_names[i]}","--build-arg SOURCE_DIR=${image_names[i]}/ ."))
+            }
           }
         }
       }
