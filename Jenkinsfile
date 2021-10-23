@@ -7,6 +7,8 @@ pipeline {
     registryCredentialSet = 'dockerhub'
   }
   stages {
+    def image_names = ['frontend', 'backend']
+    def image_build = []
     stage('build frontend'){
       agent {
         node {
@@ -16,8 +18,6 @@ pipeline {
       steps {
         echo 'Building container image...'
         script {
-          def image_names = ['frontend', 'backend']
-          def image_build = []
           for (int i = 0; i < image_names.size(); i++) {
             echo "image_name = ${image_names[i]}"
             image_build.add(docker.build("${image_names[i]}","--build-arg SOURCE_DIR=${image_names[i]}/ ."))
