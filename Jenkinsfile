@@ -28,10 +28,9 @@ pipeline {
       steps {
         echo 'Building container image...'
         script {
-          withCredentials([
-            usernamePassword(credentialsId: 'registry_credential_set', usernameVariable: 'username')]) {
+          withCredentials([usernamePassword(credentialsId: registry_credential_set, passwordVariable: 'password', usernameVariable: 'username')]) {
             for (int i = 0; i < image_names.size(); i++) {
-              echo "image_name = ${image_names[i]} usename = ${usename}"
+              echo "image_name = ${image_names[i]} username = ${username}"
               image_build.add(docker.build("${image_names[i]}","--build-arg SOURCE_DIR=${image_names[i]}/ ."))
             }
           }
