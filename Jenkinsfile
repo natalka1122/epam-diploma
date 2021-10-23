@@ -16,7 +16,15 @@ pipeline {
       steps {
         echo 'Building container image...'
         script {
-          dockerInstance = docker.build("frontend","--build-arg SOURCE_DIR=frontend/ .")
+          def image_names = ['frontend', 'backend']
+          def image_build = []
+          for (int i = 0; i < image_names.size(); i++) {
+            image_build.add(docker.build("${image_names[i]}","--build-arg SOURCE_DIR=${image_names[i]}/ ."))
+          }
+          echo image_build
+          input "000"
+          // docker_frontend = docker.build("frontend","--build-arg SOURCE_DIR=frontend/ .")
+          // docker_backend = docker.build("backend","--build-arg SOURCE_DIR=backend/ .")
         }
       }
     }
@@ -29,7 +37,7 @@ pipeline {
       steps {
         echo 'Running tests inside the container...'
         script {
-          dockerInstance.inside('-u root'){
+          docker_frontend.inside('-u root'){
           //docker.image("frontend") {
             sh 'pip install -r /app/requirements.txt'
             sh 'pip install --upgrade pylint'
