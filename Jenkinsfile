@@ -5,7 +5,6 @@ pipeline {
     CHAT_ID = credentials('chatId')
     image_name_frontend = 'natalka1122/epam-diploma-frontend'
     registryCredentialSet = 'dockerhub'
-    IMAGE_NAMES = get_image_names()
   }
   stages {
     stage('build frontend'){
@@ -17,9 +16,11 @@ pipeline {
       steps {
         echo 'Building container image...'
         script {
+          def image_names = ['frondend', 'backend']
           def image_build = []
-          for (int i = 0; i < IMAGE_NAMES.size(); i++) {
-            image_build.add(docker.build("${IMAGE_NAMES[i]}","--build-arg SOURCE_DIR=${IMAGE_NAMES[i]}/ ."))
+          for (int i = 0; i < image_names.size(); i++) {
+            echo "image_name = ${image_names[i]}"
+            image_build.add(docker.build("${image_names[i]}","--build-arg SOURCE_DIR=${image_names[i]}/ ."))
           }
         }
       }
@@ -33,12 +34,14 @@ pipeline {
       steps {
         echo 'Running tests inside the container...'
         script {
-          docker_frontend.inside('-u root'){
-          //docker.image("frontend") {
-            sh 'pip install -r /app/requirements.txt'
-            sh 'pip install --upgrade pylint'
-            sh 'cd /app && python3 -m pylint --output-format=parseable --fail-under=9 --msg-template="{path}:{line}: [{msg_id}({symbol}), {obj}] {msg}" *.py | tee pylint.log || echo "pylint exited with $?"'
-            sh 'sleep 1000'
+          for (int i = 0; i < image_build.size(); i++) {
+            echo "image_build = ${image_build[i]}"
+            image_build[i].inside('-u root'){
+              sh 'pip install -r /app/requirements.txt'
+              sh 'pip install --upgrade pylint'
+              sh 'cd /app && python3 -m pylint --output-format=parseable --fail-under=9 --msg-template="{path}:{line}: [{msg_id}({symbol}), {obj}] {msg}" *.py | tee pylint.log || echo "pylint exited with $?"'
+              sh 'sleep 1000'
+            }
           }
         }
       }
@@ -89,8 +92,4 @@ pipeline {
       }
     }
   }
-}
-
-def get_image_names(){
-  return ["frontend", "backend"]
 }
