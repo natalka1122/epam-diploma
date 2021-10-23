@@ -1,3 +1,7 @@
+import groovy.transform.Field
+@Field def image_names
+@Field def image_build
+
 pipeline {
   agent any
   environment {
@@ -7,8 +11,14 @@ pipeline {
     registryCredentialSet = 'dockerhub'
   }
   stages {
-    def image_names = ['frontend', 'backend']
-    def image_build = []
+    stage('init vars') {
+      steps{
+        script {
+          image_names = ['frontend', 'backend']
+          image_build = []
+        }
+      }
+    }
     stage('build frontend'){
       agent {
         node {
