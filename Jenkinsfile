@@ -71,7 +71,7 @@ pipeline {
         }
       }
     }
-    stage('docker-compose full restart') {
+    stage('dev environment') {
       agent {
         node {
           label 'proxmox'
@@ -80,6 +80,16 @@ pipeline {
       steps {
         sh 'docker-compose down'
         sh 'docker-compose up -d'
+      }
+    }
+    stage('Ready for prod?') {
+      steps {
+        input message: "Are we ready for prod?"
+      }
+    }
+    stage('Deploy to prod') {
+      steps {
+        echo "Kubernetes"
       }
     }
   }
