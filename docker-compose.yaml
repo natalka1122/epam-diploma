@@ -2,11 +2,7 @@ version: "3.9"
 
 services:
   frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        SOURCE_DIR: frontend/
+    image: natalka1122/frontend
     ports:
       - 5000:5000/tcp
     environment:
@@ -16,11 +12,7 @@ services:
       - default
 
   backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        SOURCE_DIR: backend/
+    image: natalka1122/backend
     networks:
       - backend
 
